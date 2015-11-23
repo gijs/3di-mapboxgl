@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href='https://www.mapbox.com/base/latest/base.css?v1.0' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+          margin:0;
+          padding:0;
+        }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        #overlay {
+          position:absolute;
+          padding:10px;
+          top:0px;
+          left:0px;
+          background:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<div id='overlay'>
+  <div class='control pad1y'>
+    <a class='button col12 short' onclick='playPause(this)'>Pause</a>
+  </div>
+  <div class='control'><input
+    onchange='changeprop("raster-hue-rotate", this)'
+    value=-4
+    min=-360
+    max=360
+    type='range' id='hue'>
+    <small>Hue</small>
+  </div>
+  <div class='control'><input
+    onchange='changeprop("raster-contrast", this)'
+    value=0.3
+    step=0.1
+    min=-1 max=1
+    type='range' id='contrast'>
+    <small>Contrast</small>
+  </div>
+  <div class='control'><input
+    onchange='changeprop("raster-saturation", this)'
+    value=0
+    step=0.1
+    min=-1 max=1
+    type='range' id='saturation'>
+    <small>Saturation</small>
+  </div>
+  <div class='control'><input
+    onchange='setSpeed(this)'
+    value=1
+    step=0.5
+    min=-2 max=6
+    type='range'>
+    <small>Speed</small>
+  </div>
+  <div class="pad1y small quiet" style='width:120px;'>
+    <a class='col12 quiet' href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>
+    <a class='col12 quiet' href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a>
+    <a class='col12 quiet' href="https://www.digitalglobe.com/" target="_blank">© DigitalGlobe</a></div>
+  </div>
+</div>
+<script src=site.js></script>
+
+</body>
+</html>
+
