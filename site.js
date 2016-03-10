@@ -1,106 +1,58 @@
 /* global mapboxgl */
 mapboxgl.accessToken = 'pk.eyJ1IjoibmVsZW5zY2h1dXJtYW5zIiwiYSI6ImhkXzhTdXcifQ.3k2-KAxQdyl5bILh_FioCw';
 var map = new mapboxgl.Map({
-    container: 'map',
-    center: [ -100, 32 ],
-    attributionControl: false,
-    zoom: 3,
-    style: {
-    "version": 8,
-    "sources": {
-        "satellite": {
-            "type": "raster",
-            "url": "mapbox://mapbox.satellite",
-            "tileSize": 256
-        },
-        "video": {
-            "type": "video",
-            "urls": ["video/duifpolder.webm", "video/duifpolder.mp4"],
-            "coordinates": [
-              [5.0131194592, 52.5288024961],
-              [5.0131194592, 52.1031311859],
-              [5.7631194592, 52.1031311859],
-              [5.7650756836, 52.5288024961]
-            ]
-        }
-    },
-    "layers": [{
-        "id": "background",
-        "type": "background",
-        "paint": {
-            "background-color": "rgb(4,7,14)"
-        }
-    }, {
-        "id": "satellite",
-        "type": "raster",
-        "source": "satellite"
-    }
-    , {
-        "id": "video",
-        "type": "raster",
-        "source": "video"
-    }
-    ]
-	}
+  container: 'map',
+  center: [4.3039236,51.9482355],
+  attributionControl: false,
+  zoom: 13,
+  pitch: 60, // pitch in degrees
+  bearing: 0, // bearing in degrees
+  style: 'mapbox://styles/mapbox/streets-v8'
 });
-
-
-map.fitBounds([
-	[5.0131194592,52.1031311859],
-	[5.0131194592,52.5288024961],
-	[5.7650756836,52.5288024961],
-	[5.0131194592,52.1031311859]
-], { duration: 0 });
-
-
-// 474521.07159437414,6788831.104176215,480636.03385718825,6794946.066439027
-
+map.addControl(new mapboxgl.Navigation());
 
 map.once('style.load', function() {
 
-    map.batch(function() {
-      map.addSource('storm-source', {
-        type: 'video',
-        urls: ['video/duifpolder.mp4'],
-        coordinates: [	
-    			[5.0131194592, 52.5288024961],
-    			[5.0131194592, 52.1031311859],
-    			[5.7631194592, 52.1031311859],
-    			[5.7650756836, 52.5288024961]
-        ]
-      });
+  map.addSource('threedi-source', {
+    type: 'video',
+    // urls: ['video/dancer1.webm'],
+    urls: ['video/duifpolder.webm', 'video/duifpolder.mp4'],
+    // urls: ['video/duifpolder2.webm', 'video/duifpolder2.mp4'],
+    coordinates: [
+      [4.312798976898193,51.95407831656533],
+      [4.295053482055663,51.95407831656533],
 
-      map.addLayer({
-        type: 'raster',
-        id: 'storm-layer',
-        source: 'storm-source',
-        paint: {
-          'raster-contrast': 0.3,
-          'raster-hue-rotate': -4
-        }
-      },
-      'country_label_small');
-    });
+      [4.295053482055663,51.94238659091772],
+      [4.312798976898193,51.94238659091772]
+    ]
+  });
 
-    map.style.sources['storm-source'].once('change', function() {
-      var video = map.style.sources['storm-source'].getVideo();
+  map.addLayer({
+    "id": "lizard",
+    "type": "raster",
+    "source": "threedi-source",
+    "source-layer": "lizard"
+  }, 'water');
 
-      window.playPause = function(elem) {
-        if (elem.innerHTML == 'Play') {
-          video.play();
-          elem.innerHTML = 'Pause';
-        } else {
-          video.pause();
-          elem.innerHTML = 'Play';
-        }
-      };
+  map.style.sources['threedi-source'].once('change', function() {
+    var video = map.style.sources['threedi-source'].getVideo();
 
-      window.setSpeed = function(elem) {
-        video.playbackRate = parseFloat(elem.value);
-      };
-    });
+    window.playPause = function(elem) {
+      if (elem.innerHTML == 'Play') {
+        video.play();
+        elem.innerHTML = 'Pause';
+      } else {
+        video.pause();
+        elem.innerHTML = 'Play';
+      }
+    };
+
+    window.setSpeed = function(elem) {
+      video.playbackRate = parseFloat(elem.value);
+    };
+  });
 });
 
 function changeprop(prop, elem) {
-  map.setPaintProperty('storm-layer', prop, parseFloat(elem.value));
+  map.setPaintProperty('lizard', prop, parseFloat(elem.value));
 }
